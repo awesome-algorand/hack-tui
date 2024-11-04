@@ -45,25 +45,25 @@ jobs:
       - uses: go-semantic-release/action@v1
         name: pre-release
         id: Pre-release
-        if: ${{github.ref == 'ref/head/main'}}
+        if: ${{github.ref == 'ref/heads/main'}}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: true
       - name: Upload Pre-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{steps.pre-release.outputs.version != '' && github.ref != 'ref/head/main'}}
+        if: ${{steps.pre-release.outputs.version != '' && github.ref != 'ref/heads/main'}}
         run: gh release upload v${{steps.pre-release.outputs.version}} bin/**/*
       - uses: go-semantic-release/action@v1
         name: Release
         id: semver
-        if: ${{github.ref != 'ref/head/main'}}
+        if: ${{github.ref != 'ref/heads/main'}}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{steps.semver.outputs.version != '' && github.ref != 'ref/head/main'}}
+        if: ${{steps.semver.outputs.version != '' && github.ref != 'ref/heads/main'}}
         run: gh release upload v${{steps.semver.outputs.version}} bin/**/*
 
       
